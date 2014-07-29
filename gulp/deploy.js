@@ -6,7 +6,5 @@ var $ = require('gulp-load-plugins')();
 
 gulp.task('deploy', function () {
     return gulp.src("./dist/**/*")
-        .pipe($.ghPages())
-    	.pipe($.filelog())
-        .pipe($.size());        
+        .pipe($.ghPages());
 });
