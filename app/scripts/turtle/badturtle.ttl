@@ -1,0 +1,43 @@
+@prefix foo: <http://bar> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix fab: <http://purl.org/fab/ns#> .
+
+<http://bar.com/> a "foo" .
+
+<http://a.example/%66oo-bar> a "fii" .
+
+<http://ex.org/?bla#foo> <http://ex.org/?bla#bar> <http://ex.org/?bla#boo> .
+
+rdf:type #comment
+rdf:type #comment
+# comment
+rdf:type .
+
+r:f a:b -.60.70e-80 .
+r:f a:b 10e20 .
+r:f a:b +30.40E+50 .
+
+r:f a:b 1 .
+r:f a:b 2 .
+r:f a:b 2.0 .
+
+r:f a:b .3 .
+
+:a :b :c .
+
+r:f a:b -.3 .
+r:f a:b -0.3 .
+
+rf:f a:b true .
+rf:f a:b false .
+leg:3032571 isbn13:9780136019701 fab:1234 .
+
+og:video:height a:b b:foo .
+
+<a> <b> (1 "2" :o) .
+
+:a :b wgs:lat\-long .
+
+rdf:foo rdf:faa "asdfkjasd lkfjasldkfjasdlkf asdfas 2345€#%°!\"" .
+rdf:foo rdf:faa """asdf asdf asdf\t\n 
+ASDFASDF """ .
