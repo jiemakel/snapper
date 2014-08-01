@@ -70,7 +70,7 @@ CodeMirror.defineMode "turtle", (config) ->
       state.lastWasColon = true
       "operator"
     else
-      if (lastWasColon) then stream.eatWhile /[_\w\d:\\-]/
+      if (lastWasColon) then stream.eatWhile /[_\w\d#:\\-]/
       else stream.eatWhile /[_\w\d\\-]/
       if stream.peek() is ":"
         return "variable-3"
