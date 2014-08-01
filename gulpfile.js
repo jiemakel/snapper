@@ -1,9 +1,7 @@
 'use strict';
-
-var gulp = require('gulp');
-
+// Note the new way of requesting CoffeeScript since 1.7.x
+require('coffee-script/register');
+// This bootstraps your Gulp's main file
 require('require-dir')('./gulp');
 
-gulp.task('default', ['clean'], function () {
-    gulp.start('build');
-});
+require("gulp").task("default", [ "build" ]);
