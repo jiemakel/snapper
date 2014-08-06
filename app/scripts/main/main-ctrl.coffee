@@ -1,4 +1,4 @@
-angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $document, $stateParams, $localStorage, prefixService, $q, sparql) ->
+angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateParams, $localStorage, prefixService, $q, sparql) ->
 	$scope.config = {}
 	# input initialization
 	for param, value of $stateParams
@@ -22,23 +22,32 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $docume
 			$localStorage.graphIRI=newValue
 	)
 	$scope.sparqlEndpointInputValid = true
+	sparqlEndpointInputCheckCanceler = null
 	$scope.$watch('sparqlEndpointInput', (newValue,oldValue) ->
 		if (newValue?)
-			sparql.check(newValue).then((isValid) ->
+			if sparqlEndpointInputCheckCanceler? then sparqlEndpointInputCheckCanceler.resolve()
+			sparqlEndpointInputCheckCanceler = $q.defer()
+			sparql.check(newValue,{timeout: sparqlEndpointInputCheckCanceler.promise}).then((isValid) ->
 				$scope.sparqlEndpointInputValid=isValid
 			,() -> $scope.sparqlEndpointInputValid=false)
 	)
 	$scope.sparulEndpointInputValid = true
+	sparulEndpointInputCheckCanceler = null
 	$scope.$watch('sparulEndpointInput', (newValue,oldValue) ->
 		if (newValue?)
-			sparql.checkUpdate(newValue).then((isValid) ->
+			if sparulEndpointInputCheckCanceler? then sparulEndpointInputCheckCanceler.resolve()
+			sparulEndpointInputCheckCanceler = $q.defer()
+			sparql.checkUpdate(newValue,{timeout: sparulEndpointInputCheckCanceler.promise}).then((isValid) ->
 				$scope.sparulEndpointInputValid=isValid
 			,() -> $scope.sparulEndpointInputValid=false)
 	)
 	$scope.restEndpointInputValid = true
+	restEndpointInputCheckCanceler = null
 	$scope.$watch('restEndpointInput', (newValue,oldValue) ->
 		if (newValue?)
-			sparql.checkRest(newValue).then((isValid) ->
+			if restEndpointInputCheckCanceler? then restEndpointInputCheckCanceler.resolve()
+			restEndpointInputCheckCanceler = $q.defer()
+			sparql.checkRest(newValue,{timeout: restEndpointInputCheckCanceler.promise}).then((isValid) ->
 				$scope.restEndpointInputValid=isValid
 			,() -> $scope.restEndpointInputValid=false)
 	)

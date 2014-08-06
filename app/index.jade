@@ -24,6 +24,18 @@ html(lang="en")
     title snapper
     
   body(ng-app="snapper")
+    .ui.dimmer.page(ng-class="{active:authOpen}"): .ui.modal.transition.visible
+      h3.header Authentication required
+      form.content.ui.form
+        .field
+          label Username:
+          input(type='text', ng-model="username")
+        .field
+          label Password:
+          input(type='password', ng-model="password")
+        .actions
+          button.ui.green.button(ng-click="setAuth()") Ok
+          button.ui.red.button(ng-click="dismissAuth()") Cancel    
     main(ui-view="")
     // build:js(app) scripts/vendor.js
     // bower:js
@@ -35,6 +47,7 @@ html(lang="en")
     script(src='bower_components/angular-ui-codemirror/ui-codemirror.js')
     script(src='bower_components/angular-animate/angular-animate.js')
     script(src='bower_components/angular-toastr/dist/angular-toastr.js')
+    script(src='bower_components/angular-http-auth/src/http-auth-interceptor.js')
     // endbower
     script(src='bower_components/yasqe/dist/yasqe.js')
     script(src='bower_components/codemirror/addon/display/fullscreen.js')
