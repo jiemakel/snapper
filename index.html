@@ -8,8 +8,27 @@
     <title>snapper</title>
   </head>
   <body ng-app="snapper">
+    <div ng-class="{active:authOpen}" class="ui dimmer page">
+      <div class="ui modal transition visible">
+        <h3 class="header">Authentication required</h3>
+        <form class="content ui form">
+          <div class="field">
+            <label>Username:</label>
+            <input type="text" ng-model="username">
+          </div>
+          <div class="field">
+            <label>Password:</label>
+            <input type="password" ng-model="password">
+          </div>
+          <div class="actions">
+            <button ng-click="setAuth()" class="ui green button">Ok</button>
+            <button ng-click="dismissAuth()" class="ui red button">Cancel    </button>
+          </div>
+        </form>
+      </div>
+    </div>
     <main ui-view=""></main>
-    <script src="scripts/vendor-afe4095b.js"></script>
-    <script src="scripts/main-4bad8cad.js"></script>
+    <script src="scripts/vendor-571f4501.js"></script>
+    <script src="scripts/main-d489e55f.js"></script>
   </body>
 </html>
