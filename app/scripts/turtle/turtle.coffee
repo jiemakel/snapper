@@ -2,6 +2,14 @@
 CodeMirror.defineMode "turtle", (config) ->
   wordRegexp = (words) ->
     new RegExp("^(?:" + words.join("|") + ")$", "i")
+  escapeAcceptingEatWhile = (stream, regex) ->
+    stream.eatWhile(regex)
+    loop
+      if (stream.peek()=='\\')
+        stream.next()
+        stream.next()
+        stream.eatWhile(regex)
+      else break
   tokenBase = (stream, state) ->
     if (state.curPos == "MLL")
         stream.eatWhile(/[^"]/)
@@ -36,7 +44,7 @@ CodeMirror.defineMode "turtle", (config) ->
       state.curPos = "EOS"  if state.inLists is 0
       if (ch=="\"") && stream.match(/""/)
         state.curPos = "MLL"
-        stream.eatWhile(/[^"]*/)
+        stream.eatWhile(/[^"]/)
         "string-2"
       else 
         state.tokenize = tokenLiteral(ch)
@@ -70,7 +78,7 @@ CodeMirror.defineMode "turtle", (config) ->
       state.lastWasColon = true
       "operator"
     else
-      if (lastWasColon) then stream.eatWhile /[_\w\d#:\\-]/
+      if (lastWasColon) then escapeAcceptingEatWhile(stream,/[_\w\d:-]/)
       else stream.eatWhile /[_\w\d\\-]/
       if stream.peek() is ":"
         return "variable-3"
@@ -156,7 +164,15 @@ CodeMirror.defineMode "turtle", (config) ->
     if stream.sol()
       state.context.align = false  if state.context and not state.context.align?
       state.indent = stream.indentation()
-    return null  if stream.eatSpace()
+    if stream.eatSpace()
+      if (state.lastWasColon)
+        state.lastWasColon = false
+        if state.curPos is "subject"
+          state.curPos = "property"
+        else if state.curPos is "property"
+          state.curPos = "object"
+        else state.curPos = "EOS"  if state.curPos is "object" and state.inLists is 0
+      return null
     style = state.tokenize(stream, state)
     state.context.align = true  if style isnt "string" and state.context and not state.context.align? and state.context.type isnt "pattern"
     if curPunc is "("

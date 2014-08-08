@@ -154,7 +154,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 					ns = prefixService.getNs(prefix.string,true)
 					if (ns?) then appendPrefix(prefix.string,ns)			
 	applyAutocompletion = (cm,data,completion) ->
-		sf = prefixService.shortForm(completion.text,true)
+		sf = prefixService.shortForm(completion.text,false,true)
 		knownPrefixes = getPrefixesFromData($scope.data)
 		cm.replaceRange(sf.shortForm, data.from, data.to, "complete")
 		if (!knownPrefixes[sf.prefix]?)
@@ -272,7 +272,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 							if (!object) then query=parts[0]+parts[2]
 							else query = parts[0]+parts[1].replace("<OBJECT>",object)+parts[2]
 						sparql.query($scope.sparqlEndpoint,replaceAll(query,"<QUERY>",qiri)).then((response) ->
-							result = ({text:res.iri.value,displayText:prefixService.shortForm(res.iri.value).shortForm, hint:applyAutocompletion} for res in response.data.results.bindings)
+							result = ({text:res.iri.value,displayText:prefixService.shortForm(res.iri.value,false,true).shortForm, hint:applyAutocompletion} for res in response.data.results.bindings)
 							callback(
 								list: result
 								from: CodeMirror.Pos(cur.line, prefix.start)
@@ -410,7 +410,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 		matches = data.match(iriMatchRegex)
 		newPrefixes = ""
 		for iri in matches when !prefixService.getPrefix(iri.substring(1,iri.length-1))
-			sf = prefixService.shortForm(iri,true)
+			sf = prefixService.shortForm(iri,false,true)
 			if (sf.newPrefix)
 				newPrefixes += "@prefix #{sf.prefix}: <#{sf.ns}> .\n"
 			data = replaceAll(data,iri,sf.shortForm)

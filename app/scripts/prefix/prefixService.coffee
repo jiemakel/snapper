@@ -45,28 +45,45 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
       if (!checkdefault)
         prefixNsMap[prefix]
       prefixNsMap[prefix] ? defaultPrefixNsMap[prefix]
-    shortForm : (iuri,allocate) ->
+    unescapeLocalName : (lname) ->
+      lname.replace(/\\/g,"")
+    escapeLocalName : (lname) ->
+      lname.replace(/\\.$/,"\\.").replace(/^([.-])/,"\\$1").replace(/([\\~!$&'()*+,;=\/?#@%])/g,'\\$1')
+    shortForm : (iuri,allowShorter,allocate) ->
       if (iuri.charAt(iuri.length-1)=='>' && iuri.indexOf('"^^<')!=-1) # datatyped literal
         uri = iuri.substring(iuri.indexOf('"^^<')+4,iuri.length-1)
-        tmp = this.sshortForm(uri)
+        tmp = this.shortForm(uri)
         return { shortForm: iuri.substring(0,iuri.indexOf('"^^<')+3) + tmp.shortForm, ns : tmp.ns, prefix : tmp.prefix }
       if (iuri.charAt(0)=='"') then return { shortForm: iuri }
       if (iuri.charAt(0)=='<' && iuri.charAt(iuri.length-1)=='>') then uri = iuri.substring(1,iuri.length-1) else uri = iuri
       pos = getLastSplit(uri,uri.length)
       if (pos!=-1)
-        while (pos>0)
-          if (nsPrefixMap[uri.substring(0,pos+1)]?)
-            prefix = nsPrefixMap[uri.substring(0,pos+1)]
-            return { shortForm: prefix+':'+uri.substring(pos+1), ns : uri.substring(0,pos+1), prefix : prefix }
-          pos = getLastSplit(uri,pos-1)
+        if (allowShorter)
+          while (pos>0)
+            if (nsPrefixMap[uri.substring(0,pos+1)]?)
+              prefix = nsPrefixMap[uri.substring(0,pos+1)]
+              return { shortForm: prefix+':'+this.escapeLocalName(uri.substring(pos+1)), ns : uri.substring(0,pos+1), prefix : prefix }
+            pos = getLastSplit(uri,pos-1)
+        else if (nsPrefixMap[uri.substring(0,pos+1)]?)
+          prefix = nsPrefixMap[uri.substring(0,pos+1)]
+          return { shortForm: prefix+':'+this.escapeLocalName(uri.substring(pos+1)), ns : uri.substring(0,pos+1), prefix : prefix }
         if (!allocate) then return { shortForm: iuri }
-        while (pos>0)
-          if (defaultNsPrefixMap[uri.substring(0,pos+1)]?)
-            prefix = defaultNsPrefixMap[uri.substring(0,pos+1)]
-            nsPrefixMap[ns]=prefix
-            prefixNsMap[prefix]=ns
-            return { shortForm: prefix+':'+uri.substring(pos+1), ns : uri.substring(0,pos+1), prefix : prefix, newPrefix : true }
-          pos = getLastSplit(uri,pos-1)
+        pos = getLastSplit(uri,uri.length)
+        if (allowShorter)
+          while (pos>0)
+            if (defaultNsPrefixMap[uri.substring(0,pos+1)]?)
+              ns = uri.substring(0,pos+1)
+              prefix = defaultNsPrefixMap[uri.substring(0,pos+1)]
+              nsPrefixMap[ns]=prefix
+              prefixNsMap[prefix]=ns
+              return { shortForm: prefix+':'+this.escapeLocalName(uri.substring(pos+1)), ns : uri.substring(0,pos+1), prefix : prefix, newPrefix : true }
+            pos = getLastSplit(uri,pos-1)
+        else if (defaultNsPrefixMap[uri.substring(0,pos+1)]?)
+          ns = uri.substring(0,pos+1)
+          prefix = defaultNsPrefixMap[uri.substring(0,pos+1)]
+          nsPrefixMap[ns]=prefix
+          prefixNsMap[prefix]=ns
+          return { shortForm: prefix+':'+this.escapeLocalName(uri.substring(pos+1)), ns : uri.substring(0,pos+1), prefix : prefix, newPrefix : true }
         pos = getLastSplit(uri,uri.length)
         pos2 = getLastSplit(uri,pos-1)
         if (pos2!=-1 && (uri.charAt(pos2+1)<'0' || uri.charAt(pos2+1)>'9'))
@@ -77,7 +94,7 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
         newNs = uri.substring(0,pos+1)
         nsPrefixMap[newNs]=newPrefix
         prefixNsMap[newPrefix]=newNs
-        return { shortForm: newPrefix+':'+uri.substring(pos+1), ns: newNs, prefix:newPrefix, newPrefix:true }
+        return { shortForm: newPrefix+':'+this.escapeLocalName(uri.substring(pos+1)), ns: newNs, prefix:newPrefix, newPrefix:true }
       { shortForm: iuri }
   }
 )
