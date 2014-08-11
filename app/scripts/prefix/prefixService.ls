@@ -6,28 +6,27 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
   prefixNsMap = {}
   nsPrefixMap = {}
   newNss = 0
-  $http.get("http://prefix.cc/popular/all.file.json").success((data) ->
-    for prefix,ns of data
+  do 
+    data <-! $http.get("http://prefix.cc/popular/all.file.json").then
+    for prefix,ns of data.data
       defaultNsPrefixMap[ns]=prefix
       defaultPrefixNsMap[prefix]=ns
-  )
-  getLastSplit = (string,pos) ->
+  function getLastSplit(string,pos)
     p1 = string.lastIndexOf('#',pos)
     p2 = string.lastIndexOf('/',pos)
     if (p1>p2) then p1 else p2
   {
-    reset : () -> 
+    reset : -> 
       prefixNsMap = {}
       nsPrefixMap = {}
     setPrefixNsMap : (newPrefixNsMap) -> 
       prefixNsMap = newPrefixNsMap
-      nsPrefixMap = new ->
-        @[ns] = prefix for prefix, ns of prefixNsMap
-        this
+      nsPrefixMap = {}
+      for prefix, ns of prefixNsMap then nsPrefixMap[ns]=prefix
     invert : (map) ->
-      new ->
-        @[ns] = prefix for prefix, ns of map
-        this
+      ret = {}
+      for prefix, ns of map then ret[ns]=prefix
+      ret
     setPrefixNs : (prefix,ns) -> 
       nsPrefixMap[ns]=prefix
       prefixNsMap[prefix]=ns

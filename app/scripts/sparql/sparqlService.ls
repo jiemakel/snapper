@@ -4,70 +4,70 @@ angular.module('fi.seco.sparql',[])
   .factory('sparql', ($http,$q) ->
     service =
       check : (endpoint,params) ->
-          deferred = $q.defer()
-          $http(angular.extend({
-            method: "GET"
-            url : endpoint
-            params: { query:"ASK {}" }
-            headers: { 'Accept' : 'application/sparql-results+json' }
-          },params)).then(
-            (response) -> deferred.resolve(response.data.boolean?)
-          , (response) -> deferred.reject(response)
-          )
-          deferred.promise
+        deferred = $q.defer!
+        $http(angular.extend({
+          method: "GET"
+          url : endpoint
+          params: { query:"ASK {}" }
+          headers: { 'Accept' : 'application/sparql-results+json' }
+        },params)).then(
+          (response) -> deferred.resolve(response.data.boolean?)
+        , (response) -> deferred.reject(response)
+        )
+        deferred.promise
       checkUpdate : (endpoint,params) ->
-          deferred = $q.defer()
-          $http(angular.extend({
-            method: "POST"
-            url: endpoint
-            headers: { 'Content-Type' : 'application/sparql-update' }
-            data: "INSERT DATA {}"
-          },params)).then(
-            (response) -> deferred.resolve(response.status == 204)
-          , (response) -> deferred.reject(response)
-          )
-          deferred.promise
+        deferred = $q.defer!
+        $http(angular.extend({
+          method: "POST"
+          url: endpoint
+          headers: { 'Content-Type' : 'application/sparql-update' }
+          data: "INSERT DATA {}"
+        },params)).then(
+          (response) -> deferred.resolve(response.status == 204)
+        , (response) -> deferred.reject(response)
+        )
+        deferred.promise
       checkRest : (endpoint,params) ->
-          deferred = $q.defer()
-          $http(angular.extend({
-            method: "POST"
-            url : endpoint + "?default"
-            data : ""
-            headers: { 'Content-Type' : 'text/turtle' }
-          },params)).then(
-            (response) -> deferred.resolve(response.status == 204)
-          , (response) -> deferred.reject(response)
-          )
-          deferred.promise
+        deferred = $q.defer!
+        $http(angular.extend({
+          method: "POST"
+          url : endpoint + "?default"
+          data : ""
+          headers: { 'Content-Type' : 'text/turtle' }
+        },params)).then(
+          (response) -> deferred.resolve(response.status == 204)
+        , (response) -> deferred.reject(response)
+        )
+        deferred.promise
       get : (endpoint,graphIRI,params) ->
         $http(angular.extend({
-            method: "GET"
-            url : endpoint
-            params: if graphIRI? then { graph:graphIRI } else {"default":""}
-            headers: { 'Accept' : 'text/turtle' }
-          },params))
+          method: "GET"
+          url : endpoint
+          params: if graphIRI? then { graph:graphIRI } else {"default":""}
+          headers: { 'Accept' : 'text/turtle' }
+        },params))
       post : (endpoint,graph,graphIRI,params) ->
         $http(angular.extend({
-            method: "POST"
-            url : endpoint
-            params: if graphIRI? then { graph:graphIRI } else {"default":""}
-            data: graph
-            headers: { 'Content-Type' : 'text/turtle' }
-          },params))
+          method: "POST"
+          url : endpoint
+          params: if graphIRI? then { graph:graphIRI } else {"default":""}
+          data: graph
+          headers: { 'Content-Type' : 'text/turtle' }
+        },params))
       put : (endpoint,graph,graphIRI,params) ->
         $http(angular.extend({
-            method: "PUT"
-            url : endpoint
-            params: if graphIRI? then { graph:graphIRI } else {"default":""}
-            data: graph
-            headers: { 'Content-Type' : 'text/turtle' }
-          },params))
+          method: "PUT"
+          url : endpoint
+          params: if graphIRI? then { graph:graphIRI } else {"default":""}
+          data: graph
+          headers: { 'Content-Type' : 'text/turtle' }
+        },params))
       delete : (endpoint,graphIRI,params) ->
         $http(angular.extend({
-            method: "DELETE"
-            url : endpoint
-            params: if graphIRI? then { graph:graphIRI } else {"default":""}
-          },params))
+          method: "DELETE"
+          url : endpoint
+          params: if graphIRI? then { graph:graphIRI } else {"default":""}
+        },params))
       construct : (endpoint,query,params) ->
         if (query.length<=2048)
           $http(angular.extend({

@@ -1,7 +1,9 @@
-gulp = require("gulp")
-browserSync = require("browser-sync")
+require!{
+  gulp
+  \browser-sync
+}
 
-browserSyncInit = (baseDir, files) ->
+function browserSyncInit(baseDir, files)
   browserSync.instance = browserSync.init(files,
     startPath: "/"
     server:
@@ -9,8 +11,8 @@ browserSyncInit = (baseDir, files) ->
     browser: "default"
   )
 
-gulp.task "serve", [ "watch" ], ->
-  browserSyncInit([ "app", ".tmp" ], [
+gulp.task \serve, <[watch]>, ->
+  browserSyncInit(<[app .tmp]>, [
     "app/*.html"
     ".tmp/*.html"
     ".tmp/styles/**/*.css"
@@ -22,4 +24,4 @@ gulp.task "serve", [ "watch" ], ->
     "app/images/**/*"
   ])
 
-gulp.task("serve:dist", [ "dist" ], -> browserSyncInit("dist"))
+gulp.task("serve:dist", <[dist]>, -> browserSyncInit("dist"))

@@ -182,8 +182,8 @@ CodeMirror.defineMode "turtle", (config) ->
     else if curPunc is "{"
       pushContext state, "}", stream.column()
     else if /[\]\}\)]/.test(curPunc)
-      popContext state  while state.context and state.context.type is "pattern"
-      popContext state  if state.context and curPunc is state.context.type
+      while state.context and state.context.type is "pattern" then popContext state 
+      popContext state if state.context and curPunc is state.context.type
     else if curPunc is "." and state.context and state.context.type is "pattern"
       popContext state
     else if /atom|string|variable/.test(style) and state.context
@@ -197,7 +197,7 @@ CodeMirror.defineMode "turtle", (config) ->
   indent: (state, textAfter) ->
     firstChar = textAfter and textAfter.charAt(0)
     context = state.context
-    context = context.prev  while context and context.type is "pattern"  if /[\]\}]/.test(firstChar)
+    while context and context.type is "pattern" then if /[\]\}]/.test(firstChar) then context = context.prev 
     closing = context and firstChar is context.type
     unless context
       return (if state.indent isnt 0 then state.indent else indentUnit)  if curPunc is ";"

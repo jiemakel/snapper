@@ -1,9 +1,11 @@
-gulp = require("gulp")
-mainBowerFiles = require("main-bower-files")
-$ = require("gulp-load-plugins")()
-saveLicense = require("uglify-save-license")
+require!{
+  gulp
+  \main-bower-files
+  \uglify-save-license
+}
+$ = require("gulp-load-plugins")!
 
-gulp.task "dist-html", [ "build" ], ->
+gulp.task \dist:html, <[build]>, ->
   jsFilter = $.filter("**/*.js")
   cssFilter = $.filter("**/*.css")
   gulp.src(".tmp/*.html")
@@ -19,7 +21,7 @@ gulp.task "dist-html", [ "build" ], ->
     .pipe($.rev())
     .pipe(jsFilter)
     .pipe($.ngAnnotate())
-    .pipe($.uglify(preserveComments: saveLicense))
+    .pipe($.uglify(preserveComments: uglifySaveLicense))
     .pipe(jsFilter.restore())
     .pipe(cssFilter)
     .pipe($.csso())
@@ -30,7 +32,7 @@ gulp.task "dist-html", [ "build" ], ->
     .pipe($.size())
     .pipe(gulp.dest("dist"))
 
-gulp.task "dist-images", ["clean"], ->
+gulp.task \dist:images, <[clean]>, ->
   gulp.src("app/images/**/*")
     .pipe($.plumber(errorHandler: $.notify.onError("<%= error.stack %>")))
     .pipe($.cache($.imagemin(
@@ -41,7 +43,7 @@ gulp.task "dist-images", ["clean"], ->
     .pipe($.size())
     .pipe(gulp.dest("dist/images"))
 
-gulp.task "dist-fonts", ["clean"], ->
+gulp.task \dist:fonts, <[clean]>, ->
   gulp.src(mainBowerFiles())
     .pipe($.plumber(errorHandler: $.notify.onError("<%= error.stack %>")))
     .pipe($.filter("**/*.{eot,svg,ttf,woff}"))
@@ -49,4 +51,4 @@ gulp.task "dist-fonts", ["clean"], ->
     .pipe($.size())
     .pipe(gulp.dest("dist/fonts"))
 
-gulp.task "dist", [ "dist-html", "dist-images", "dist-fonts" ]
+gulp.task \dist, <[dist:html dist:images dist:fonts]>
