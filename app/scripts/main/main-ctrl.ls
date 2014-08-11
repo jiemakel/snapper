@@ -25,8 +25,8 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 	sparqlEndpointInputCheckCanceler = null
 	$scope.$watch('sparqlEndpointInput', (newValue,oldValue) ->
 		if (newValue?)
-			if sparqlEndpointInputCheckCanceler? then sparqlEndpointInputCheckCanceler.resolve()
-			sparqlEndpointInputCheckCanceler = $q.defer()
+			if sparqlEndpointInputCheckCanceler? then sparqlEndpointInputCheckCanceler.resolve!
+			sparqlEndpointInputCheckCanceler = $q.defer!
 			sparql.check(newValue,{timeout: sparqlEndpointInputCheckCanceler.promise}).then((isValid) ->
 				$scope.sparqlEndpointInputValid=isValid
 			,-> $scope.sparqlEndpointInputValid=false)
@@ -35,8 +35,8 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 	sparulEndpointInputCheckCanceler = null
 	$scope.$watch('sparulEndpointInput', (newValue,oldValue) ->
 		if (newValue?)
-			if sparulEndpointInputCheckCanceler? then sparulEndpointInputCheckCanceler.resolve()
-			sparulEndpointInputCheckCanceler = $q.defer()
+			if sparulEndpointInputCheckCanceler? then sparulEndpointInputCheckCanceler.resolve!
+			sparulEndpointInputCheckCanceler = $q.defer!
 			sparql.checkUpdate(newValue,{timeout: sparulEndpointInputCheckCanceler.promise}).then((isValid) ->
 				$scope.sparulEndpointInputValid=isValid
 			,-> $scope.sparulEndpointInputValid=false)
@@ -45,8 +45,8 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 	restEndpointInputCheckCanceler = null
 	$scope.$watch('restEndpointInput', (newValue,oldValue) ->
 		if (newValue?)
-			if restEndpointInputCheckCanceler? then restEndpointInputCheckCanceler.resolve()
-			restEndpointInputCheckCanceler = $q.defer()
+			if restEndpointInputCheckCanceler? then restEndpointInputCheckCanceler.resolve!
+			restEndpointInputCheckCanceler = $q.defer!
 			sparql.checkRest(newValue,{timeout: restEndpointInputCheckCanceler.promise}).then((isValid) ->
 				$scope.restEndpointInputValid=isValid
 			,-> $scope.restEndpointInputValid=false)
@@ -63,7 +63,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 				$scope.sparulEndpoint = newValue
 			else if ($scope.sparulEndpoint.replace("update","sparql")==oldValue)
 				$scope.sparulEndpoint = newValue.replace("sparql","update")
-		if (newValue?) then updateGraphs()
+		if (newValue?) then updateGraphs!
 	)
 	$scope.$watch('restEndpoint', (newValue,oldValue) ->
 		$scope.restEndpointInput=newValue
@@ -105,8 +105,8 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 		$scope.showError = true
 	canceler = null
 	!function updateGraphs
-		if (canceler?) then canceler.resolve()
-		canceler := $q.defer()
+		if (canceler?) then canceler.resolve!
+		canceler := $q.defer!
 		response <-! sparql.query($scope.sparqlEndpoint,'''
 			SELECT ?graphIRI (COUNT(*) AS ?triples) {
 			  {
@@ -143,7 +143,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 				queryPrefixes[matches[1]] = matches[2] 
 		queryPrefixes
 	!function appendPrefixIfNeeded(cm) 
-		pos = cm.getCursor()
+		pos = cm.getCursor!
 		if(cm.getTokenTypeAt(pos)=="operator")
 			prefix = cm.getTokenAt({line: pos.line, ch:pos.ch-1})
 			if (prefix.type=="variable-3")
@@ -174,7 +174,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 		ret = getNodeFromPosition(cm,cur)
 		if (ret.token.type == "string-2") then null else ret
 	function getIRIUnderCursor(cm)
-		getIRIFromPosition(cm,cm.getCursor())
+		getIRIFromPosition(cm,cm.getCursor!)
 	function getPreviousNode(cm,pos)
 		if (pos.ch==-1)
 			if (pos.line==0) then return
@@ -195,7 +195,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 		if (token.end==pos.ch-1)
 			pos.ch=0
 			pos.line++
-			if (pos.line>cm.lastLine()) then return
+			if (pos.line>cm.lastLine!) then return
 			token = cm.getTokenAt(pos)
 		while (token.type!="string" && token.type!="keyword" && token.type!="variable-2" && token.type!="string-2")
 			pos.ch = token.end + 1
@@ -204,11 +204,11 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 			if (token.end==pos.ch-1)
 				pos.ch=0
 				pos.line++
-				if (pos.line>cm.lastLine()) then return
+				if (pos.line>cm.lastLine!) then return
 				token = cm.getTokenAt(pos)
 		{ token: token, pos : pos }
 	!function autocompleteHint(cm, callback, options)
-		cur = cm.getCursor()
+		cur = cm.getCursor!
 		token = cm.getTokenAt(cur)
 		if (token.type=="string" || token.type=="keyword" || token.type=="variable-2")
 			if (cm.getTokenAt({ line : cur.line, ch: token.start }).string==":")
@@ -230,7 +230,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 				qiri = prefixService.expand(prefix.string+":"+token.string)
 				switch token.type
 					when "variable-2"
-						query = subjectIRIQuery.getValue()
+						query = subjectIRIQuery.getValue!
 						tmp = getNextNode(cm,{line:cur.line, ch:token.end + 1})
 						if (tmp?)
 							property = getIRIFromPosition(cm,tmp.pos).node
@@ -238,7 +238,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 							if (tmp?)
 								object = getNodeFromPosition(cm,tmp.pos).node
 					when "keyword" 
-						query = propertyIRIQuery.getValue()
+						query = propertyIRIQuery.getValue!
 						tmp = getPreviousNode(cm,{line:cur.line, ch:token.start - 1})
 						if (tmp?)
 							subject = getIRIFromPosition(cm,tmp.pos).node
@@ -246,7 +246,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 						if (tmp?)
 							object = getNodeFromPosition(cm,tmp.pos).node
 					when "string" 
-						query = objectIRIQuery.getValue()
+						query = objectIRIQuery.getValue!
 						tmp = getPreviousNode(cm,{line:cur.line,ch:token.start - 1})
 						if (tmp?)
 							property = getNodeFromPosition(cm,tmp.pos).node
@@ -288,7 +288,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 			subject = property = object = subjectClasses = null
 			switch token.type
 				when "variable-2"
-					query = subjectLabelQuery.getValue()
+					query = subjectLabelQuery.getValue!
 					tmp = getNextNode(cm,{line:cur.line, ch:token.end + 1})
 					if (tmp?)
 						property = getIRIFromPosition(cm,tmp.pos).node
@@ -296,7 +296,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 						if (tmp?)
 							object = getNodeFromPosition(cm,tmp.pos).node
 				when "keyword" 
-					query = propertyLabelQuery.getValue()
+					query = propertyLabelQuery.getValue!
 					tmp = getPreviousNode(cm,{line:cur.line, ch:token.start - 1})
 					if (tmp?)
 						subject = getIRIFromPosition(cm,tmp.pos).node
@@ -304,7 +304,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 					if (tmp?)
 						object = getNodeFromPosition(cm,tmp.pos).node
 				when "string" 
-					query = objectLabelQuery.getValue()
+					query = objectLabelQuery.getValue!
 					tmp = getPreviousNode(cm,{line:cur.line,ch:token.start - 1})
 					if (tmp?)
 						property = getNodeFromPosition(cm,tmp.pos).node
@@ -344,7 +344,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 		d = getIRIUnderCursor(cm)
 		if (d.node?)
 			prefixService.setPrefixNsMap(getPrefixesFromData($scope.data))
-			sparql.query($scope.sparqlEndpoint,replaceAll(labelQuery.getValue(),"<IRI>",d.node)).then((response) ->
+			sparql.query($scope.sparqlEndpoint,replaceAll(labelQuery.getValue!,"<IRI>",d.node)).then((response) ->
 				if (response.data.results.bindings.length>0)
 					cm.markText({line: d.cur.line, ch:d.token.start},{line: d.cur.line, ch:d.token.end},{
 						title:response.data.results.bindings[0].label.value
@@ -374,7 +374,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 	$scope.commands.push({key:ctrl+alt+"O",command:"Toggle fullscreen mode"})
 	extraKeys = {}
 	extraKeys["Ctrl-Space"] = "autocomplete"
-	extraKeys[ctrl+"J"] = (cm) -> cm.foldCode(cm.getCursor())
+	extraKeys[ctrl+"J"] = (cm) -> cm.foldCode(cm.getCursor!)
 	folded = false
 	extraKeys[ctrl+"K"] = (cm) -> 
 		if (!folded) then CodeMirror.commands.foldAll(cm) else CodeMirror.commands.unfoldAll(cm)
@@ -434,18 +434,18 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 		ret = processIRIs(processWhitespace(ndata))
 		ret.newPrefixes+=newPrefixes
 		ret
-	escapeRegexpRegexp = new RegExp("[-\/\\^$*+?.()|[\]{}]","g")
+	escapeRegexpRegexp = new RegExp("[-\/\\^$*+?.!|[\]{}]","g")
 	function escapeRegexp(string)
 		string.replace(escapeRegexpRegexp, '\\$&')
 	function replaceAll(string,replace,replaceWith)
 		string.replace(new RegExp(escapeRegexp(replace),"g"),replaceWith)
 	function getCurrentSubjects(cm)
-		if (cm.getSelection())
+		if (cm.getSelection!)
 			pos = cm.getCursor("from")
 			pos2 = cm.getCursor("to")
 			if (pos2.line<pos.line || (pos2.line==pos.line && pos2.ch<pos.ch)) then [pos, pos2] = [pos2,pos]
 		else
-			pos = cm.getCursor()
+			pos = cm.getCursor!
 			if (pos.ch==0) then pos.ch=1
 			token = cm.getTokenAt(pos)
 			if (token.type=='variable-3')
@@ -469,7 +469,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 				if (token.end==pos2.ch-1)
 					pos2.ch=0
 					pos2.line++
-					if (pos2.line>cm.lastLine()) then return
+					if (pos2.line>cm.lastLine!) then return
 					token = cm.getTokenAt(pos2)
 		iris = []
 		data = cm.getRange(pos,pos2)
@@ -489,23 +489,23 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 		if (!currentSubjects)
 			toastr.error("Couldn't find subject IRI(s)")
 		else 
-			query = replaceAll(replaceAll(deleteResourceQuery.getValue(),"<IRIS>",currentSubjects.iris.join(" ")),"<GRAPHIRI>",$scope.graphIRI)
+			query = replaceAll(replaceAll(deleteResourceQuery.getValue!,"<IRIS>",currentSubjects.iris.join(" ")),"<GRAPHIRI>",$scope.graphIRI)
 			<-! sparql.update($scope.sparulEndpoint,query).then(_,handleError)		
-			updateGraphs()
+			updateGraphs!
 			toastr.success("Successfully deleted #{currentSubjects.iris.join(", ")} in #{if ($scope.graphIRI) then "graph "+$scope.graphIRI else "default graph" } at endpoint #{$scope.restEndpoint} .")
 	function replaceCurrentSubjects(cm)
 		currentSubjects = getCurrentSubjects(cm)
 		if (!currentSubjects)
 			toastr.error("Couldn't find subject IRI(s)")
 		else 
-			query = replaceAll(replaceAll(deleteResourceQuery.getValue(),"<IRIS>",currentSubjects.iris.join(" ")),"<GRAPHIRI>",$scope.graphIRI)
+			query = replaceAll(replaceAll(deleteResourceQuery.getValue!,"<IRIS>",currentSubjects.iris.join(" ")),"<GRAPHIRI>",$scope.graphIRI)
 			<-! sparql.update($scope.sparulEndpoint,query).then(_,handleError)
 			<-! sparql.post($scope.restEndpoint,getPrefixLinesFromData($scope.data)+currentSubjects.data,$scope.graphIRI).then(_,handleError)
-			updateGraphs()
+			updateGraphs!
 			toastr.success("Successfully replaced #{currentSubjects.iris.join(", ")} in #{if ($scope.graphIRI) then "graph "+$scope.graphIRI else "default graph" } at endpoint #{$scope.restEndpoint} .")
 	function saveCurrentSubjects(cm)
-		if (cm.getSelection()) 
-			data = cm.getSelection()
+		if (cm.getSelection!) 
+			data = cm.getSelection!
 			value = "selection"
 		else
 			tmp = getCurrentSubjects(cm)
@@ -513,14 +513,14 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 			value = tmp.iris[0]
 		if (data)
 			sparql.post($scope.restEndpoint,getPrefixLinesFromData($scope.data)+data,$scope.graphIRI).then((response) ->
-				updateGraphs()
+				updateGraphs!
 				toastr.success("Successfully inserted #{value} into #{if ($scope.graphIRI) then "graph "+$scope.graphIRI else "default graph" } at endpoint #{$scope.restEndpoint} .")
 			,handleError)
 		else toastr.error("No data to save")
 	function loadResource(cm,replace)
 		d = getIRIUnderCursor(cm)
 		if (d.node?)
-			sparql.construct($scope.sparqlEndpoint,replaceAll(describeQuery.getValue(),"<IRI>",d.node)).then((response) ->
+			sparql.construct($scope.sparqlEndpoint,replaceAll(describeQuery.getValue!,"<IRI>",d.node)).then((response) ->
 				toastr.success("Successfully loaded #{d.node} from #{if ($scope.graphIRI) then "graph "+$scope.graphIRI else "default graph" } at endpoint #{$scope.restEndpoint} .")
 				if (replace?)
 					prefixService.setPrefixNsMap(getPrefixesFromData(response.data))
@@ -530,7 +530,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 					prefixService.setPrefixNsMap(getPrefixesFromData($scope.data))
 					toAdd = processResource(response.data)
 					cm.replaceRange(toAdd.newPrefixes, {line:getLineAfterPrefixes($scope.data),ch:0})
-					cm.replaceRange(toAdd.data, {line:cm.lastLine()+1,ch:0})
+					cm.replaceRange(toAdd.data, {line:cm.lastLine!+1,ch:0})
 			,handleError)
 		else toastr.error("No IRI under cursor")
 	function loadResourceDirect(cm,replace)
@@ -548,7 +548,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 					prefixService.setPrefixNsMap(getPrefixesFromData($scope.data))
 					toAdd = processResource(response.data)
 					cm.replaceRange(toAdd.newPrefixes, {line:getLineAfterPrefixes($scope.data),ch:0})
-					cm.replaceRange(toAdd.data, {line:cm.lastLine()+1,ch:0})
+					cm.replaceRange(toAdd.data, {line:cm.lastLine!+1,ch:0})
 			,handleError)
 		else toastr.error("No IRI under cursor")
 	iriMatchRegex = new RegExp("<.*?>","g")
@@ -572,7 +572,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 			$scope.inserting=true
 			sparql.post($scope.restEndpoint,$scope.data,$scope.graphIRI).then((response) ->
 				$scope.inserting=false
-				updateGraphs()
+				updateGraphs!
 				toastr.success("Successfully inserted data into #{if ($scope.graphIRI) then "graph "+$scope.graphIRI else "default graph" } at endpoint #{$scope.restEndpoint} .")
 			,(response) ->
 				$scope.inserting=false
@@ -583,7 +583,7 @@ angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateP
 			$scope.replacing=true
 			sparql.put($scope.restEndpoint,$scope.data,$scope.graphIRI).then((response) ->
 				$scope.replacing=false
-				updateGraphs()
+				updateGraphs!
 				toastr.success("Successfully replaced #{if ($scope.graphIRI) then "graph "+$scope.graphIRI else "default graph" } at endpoint #{$scope.restEndpoint} .")
 			,(response) ->
 				$scope.replacing=false

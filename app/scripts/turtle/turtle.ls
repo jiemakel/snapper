@@ -5,9 +5,9 @@ CodeMirror.defineMode "turtle", (config) ->
   escapeAcceptingEatWhile = (stream, regex) ->
     stream.eatWhile(regex)
     loop
-      if (stream.peek()=='\\')
-        stream.next()
-        stream.next()
+      if stream.peek! is '\\'
+        stream.next!
+        stream.next!
         stream.eatWhile(regex)
       else break
   tokenBase = (stream, state) ->
@@ -16,7 +16,7 @@ CodeMirror.defineMode "turtle", (config) ->
         if (stream.match(/"""/))
           state.curPos = "EOS"
         return "string-2"
-    ch = stream.next()
+    ch = stream.next!
     error = false
     curPunc = null
     lastWasColon = state.lastWasColon
@@ -69,7 +69,7 @@ CodeMirror.defineMode "turtle", (config) ->
       else state.inLists--  if curPunc is ")"
       (if error then "punctuation error" else "punctuation")
     else if ch is "#"
-      stream.skipToEnd()
+      stream.skipToEnd!
       "comment"
     else if operatorChars.test(ch)
       stream.eatWhile operatorChars
@@ -80,10 +80,10 @@ CodeMirror.defineMode "turtle", (config) ->
     else
       if (lastWasColon) then escapeAcceptingEatWhile(stream,/[_\w\d:-]/)
       else stream.eatWhile /[_\w\d\\-]/
-      if stream.peek() is ":"
+      if stream.peek! is ":"
         return "variable-3"
       else
-        word = stream.current()
+        word = stream.current!
         if !lastWasColon && keywords.test(word)
           if word is "a"
             error = true  unless state.curPos is "property"
@@ -91,8 +91,8 @@ CodeMirror.defineMode "turtle", (config) ->
           return (if error then "meta error" else "meta")
         return "variable-2"  if ch is "@"
         if ch is "^"
-          if stream.peek() is "^"
-            stream.next()
+          if stream.peek! is "^"
+            stream.next!
             stream.eatWhile /[_\w\d:]/
             return "qualifier"
         ret = undefined
@@ -110,7 +110,7 @@ CodeMirror.defineMode "turtle", (config) ->
           state.curPos = "object"
         else state.curPos = "EOS"  if state.curPos is "object" and state.inLists is 0
         return ret
-      word = stream.current()
+      word = stream.current!
       if ops.test(word)
         null
       else if keywords.test(word)
@@ -124,7 +124,7 @@ CodeMirror.defineMode "turtle", (config) ->
     (stream, state) ->
       escaped = false
       ch = undefined
-      while (ch = stream.next())?
+      while (ch = stream.next!)?
         if ch is quote and not escaped
           state.tokenize = tokenBase
           break
@@ -161,10 +161,10 @@ CodeMirror.defineMode "turtle", (config) ->
     col: 0
 
   token: (stream, state) ->
-    if stream.sol()
+    if stream.sol!
       state.context.align = false  if state.context and not state.context.align?
-      state.indent = stream.indentation()
-    if stream.eatSpace()
+      state.indent = stream.indentation!
+    if stream.eatSpace!
       if (state.lastWasColon)
         state.lastWasColon = false
         if state.curPos is "subject"
@@ -176,11 +176,11 @@ CodeMirror.defineMode "turtle", (config) ->
     style = state.tokenize(stream, state)
     state.context.align = true  if style isnt "string" and state.context and not state.context.align? and state.context.type isnt "pattern"
     if curPunc is "("
-      pushContext state, ")", stream.column()
+      pushContext state, ")", stream.column!
     else if curPunc is "["
-      pushContext state, "]", stream.column()
+      pushContext state, "]", stream.column!
     else if curPunc is "{"
-      pushContext state, "}", stream.column()
+      pushContext state, "}", stream.column!
     else if /[\]\}\)]/.test(curPunc)
       while state.context and state.context.type is "pattern" then popContext state 
       popContext state if state.context and curPunc is state.context.type
@@ -188,10 +188,10 @@ CodeMirror.defineMode "turtle", (config) ->
       popContext state
     else if /atom|string|variable/.test(style) and state.context
       if /[\}\]]/.test(state.context.type)
-        pushContext state, "pattern", stream.column()
+        pushContext state, "pattern", stream.column!
       else if state.context.type is "pattern" and not state.context.align
         state.context.align = true
-        state.context.col = stream.column()
+        state.context.col = stream.column!
     style
   fold: "indent"
   indent: (state, textAfter) ->
