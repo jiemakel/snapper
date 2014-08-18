@@ -72,14 +72,20 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
           while (pos>0)
             if (defaultNsPrefixMap[uri.substring(0,pos+1)]?)
               ns = uri.substring(0,pos+1)
-              prefix = defaultNsPrefixMap[uri.substring(0,pos+1)]
+              prefixO = defaultNsPrefixMap[uri.substring(0,pos+1)]
+              prefix = prefixO
+              nss = 1
+              while (prefixNsMap[prefix]) then prefix = prefixO+(++nss)
               nsPrefixMap[ns]=prefix
               prefixNsMap[prefix]=ns
               return { shortForm: prefix+':'+this.escapeLocalName(uri.substring(pos+1)), ns : uri.substring(0,pos+1), prefix : prefix, newPrefix : true }
             pos = getLastSplit(uri,pos-1)
         else if (defaultNsPrefixMap[uri.substring(0,pos+1)]?)
           ns = uri.substring(0,pos+1)
-          prefix = defaultNsPrefixMap[uri.substring(0,pos+1)]
+          prefixO = defaultNsPrefixMap[uri.substring(0,pos+1)]
+          prefix = prefixO
+          nss = 1
+          while (prefixNsMap[prefix]) then prefix = prefixO+(++nss)
           nsPrefixMap[ns]=prefix
           prefixNsMap[prefix]=ns
           return { shortForm: prefix+':'+this.escapeLocalName(uri.substring(pos+1)), ns : uri.substring(0,pos+1), prefix : prefix, newPrefix : true }
