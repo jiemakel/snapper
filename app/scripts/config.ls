@@ -1,4 +1,4 @@
-angular.module('snapper', ['http-auth-interceptor','toastr','ngAnimate','ngStorage', 'ui.router', 'ui.codemirror', 'fi.seco.prefix', 'fi.seco.sparql'])
+angular.module('app', ['http-auth-interceptor','toastr','ngAnimate','ngStorage', 'ui.router', 'ui.codemirror', 'fi.seco.prefix', 'fi.seco.sparql'])
 	.run ($rootScope,$http,authService) ->
 		$rootScope.setAuth = ->
 			$rootScope.authOpen = false

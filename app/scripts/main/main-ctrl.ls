@@ -1,4 +1,4 @@
-angular.module('snapper').controller('MainCtrl', ($scope, $http, toastr, $stateParams, $localStorage, prefixService, $q, sparql) ->
+angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParams, $localStorage, prefixService, $q, sparql) ->
 	$scope.config = {}
 	# input initialization
 	for param, value of $stateParams

@@ -32,7 +32,7 @@ gulp.task "partials", <[templates]>, ->
   gulp.src(".tmp/partials/**/*.html")
     .pipe($.plumber(errorHandler: $.notify.onError("<%= error.stack %>")))
     .pipe($.ngHtml2js(
-      moduleName: "snapper"
+      moduleName: "app"
       prefix: "partials/"
     ))
     .pipe(gulp.dest(".tmp/partials"))
