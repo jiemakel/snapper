@@ -55,11 +55,11 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 		$scope.sparqlEndpointInput=newValue
 		if (newValue!=oldValue)
 			$localStorage.sparqlEndpoint=newValue
-			if ($scope.restEndpoint == null || $scope.restEndpoint == "" || $scope.restEndpoint == oldValue)
+			if (!$scope.restEndpoint || $scope.restEndpoint == "" || $scope.restEndpoint == oldValue)
 				$scope.restEndpoint = newValue
 			else if ($scope.restEndpoint.replace("data","sparql")==oldValue)
 				$scope.restEndpoint = newValue.replace("sparql","data")
-			if ($scope.sparulEndpoint == null || $scope.sparulEndpoint == "" || $scope.sparulEndpoint == oldValue)
+			if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "" || $scope.sparulEndpoint == oldValue)
 				$scope.sparulEndpoint = newValue
 			else if ($scope.sparulEndpoint.replace("update","sparql")==oldValue)
 				$scope.sparulEndpoint = newValue.replace("sparql","update")
@@ -69,11 +69,11 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 		$scope.restEndpointInput=newValue
 		if (newValue!=oldValue)
 			$localStorage.restEndpoint=newValue
-			if ($scope.sparqlEndpoint == null || $scope.sparqlEndpoint == "" || $scope.sparqlEndpoint == oldValue)
+			if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "" || $scope.sparqlEndpoint == oldValue)
 				$scope.sparqlEndpoint = newValue
 			else if ($scope.sparqlEndpoint.replace("sparql","data")==oldValue)
 				$scope.sparqlEndpoint = newValue.replace("data","sparql")
-			if ($scope.sparulEndpoint == null || $scope.sparulEndpoint == "" || $scope.sparulEndpoint == oldValue)
+			if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "" || $scope.sparulEndpoint == oldValue)
 				$scope.sparulEndpoint = newValue
 			else if ($scope.sparulEndpoint.replace("update","data")==oldValue)
 				$scope.sparulEndpoint = newValue.replace("data","update")
@@ -82,11 +82,11 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 		$scope.sparulEndpointInput=newValue
 		if (newValue!=oldValue)
 			$localStorage.sparulEndpoint=newValue
-			if ($scope.restEndpoint == null || $scope.restEndpoint == "" || $scope.restEndpoint == oldValue)
+			if (!$scope.restEndpoint || $scope.restEndpoint == "" || $scope.restEndpoint == oldValue)
 				$scope.restEndpoint = newValue
 			else if ($scope.restEndpoint.replace("data","update")==oldValue)
 				$scope.restEndpoint = newValue.replace("update","data")
-			if ($scope.sparqlEndpoint == null || $scope.sparqlEndpoint == "" || $scope.sparqlEndpoint == oldValue)
+			if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "" || $scope.sparqlEndpoint == oldValue)
 				$scope.sparqlEndpoint = newValue
 			else if ($scope.sparqlEndpoint.replace("sparql","update")==oldValue)
 				$scope.sparqlEndpoint = newValue.replace("update","sparql")
