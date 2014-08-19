@@ -17,11 +17,12 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
     if (p1>p2) then p1 else p2
   {
     reset : -> 
-      prefixNsMap = {}
-      nsPrefixMap = {}
+      newNss := 0
+      prefixNsMap := {}
+      nsPrefixMap := {}
     setPrefixNsMap : (newPrefixNsMap) -> 
-      prefixNsMap = newPrefixNsMap
-      nsPrefixMap = {}
+      prefixNsMap := newPrefixNsMap
+      nsPrefixMap := {}
       for prefix, ns of prefixNsMap then nsPrefixMap[ns]=prefix
     invert : (map) ->
       ret = {}
@@ -92,8 +93,10 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
         pos = getLastSplit(uri,uri.length)
         pos2 = getLastSplit(uri,pos-1)
         if (pos2!=-1 && (uri.charAt(pos2+1)<'0' || uri.charAt(pos2+1)>'9'))
-          newPrefix = uri.substring(pos2+1,pos)
-          if (prefixNsMap[newPrefix]) then newPrefix = "ns"+(++newNss)
+          newPrefixO = uri.substring(pos2+1,pos)
+          newPrefix = newPrefixO
+          nss = 1
+          while (prefixNsMap[newPrefix]) then newPrefix = newPrefixO+(++nss)
         else
           newPrefix = "ns"+(++newNss)
         newNs = uri.substring(0,pos+1)
