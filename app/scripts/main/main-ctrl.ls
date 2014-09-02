@@ -4,7 +4,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 	for param, value of $stateParams
 		$scope[param]=value
 	for param, value of $localStorage when !$stateParams[param]?
-		$scope[param]=value		
+		$scope[param]=value
 	$scope.sparqlEndpointInput=$scope.sparqlEndpoint
 	$scope.restEndpointInput=$scope.restEndpoint
 	$scope.graphIRIInput = if ($scope.graphIRI!=null) then $scope.graphIRI else 'default'
@@ -55,11 +55,11 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 		$scope.sparqlEndpointInput=newValue
 		if (newValue!=oldValue)
 			$localStorage.sparqlEndpoint=newValue
-			if (!$scope.restEndpoint || $scope.restEndpoint == "" || $scope.restEndpoint == oldValue)
+			if (!$scope.restEndpoint || $scope.restEndpoint == "")
 				$scope.restEndpoint = newValue
 			else if ($scope.restEndpoint.replace("data","sparql")==oldValue)
 				$scope.restEndpoint = newValue.replace("sparql","data")
-			if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "" || $scope.sparulEndpoint == oldValue)
+			if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "")
 				$scope.sparulEndpoint = newValue
 			else if ($scope.sparulEndpoint.replace("update","sparql")==oldValue)
 				$scope.sparulEndpoint = newValue.replace("sparql","update")
@@ -69,11 +69,11 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 		$scope.restEndpointInput=newValue
 		if (newValue!=oldValue)
 			$localStorage.restEndpoint=newValue
-			if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "" || $scope.sparqlEndpoint == oldValue)
+			if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "")
 				$scope.sparqlEndpoint = newValue
 			else if ($scope.sparqlEndpoint.replace("sparql","data")==oldValue)
 				$scope.sparqlEndpoint = newValue.replace("data","sparql")
-			if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "" || $scope.sparulEndpoint == oldValue)
+			if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "")
 				$scope.sparulEndpoint = newValue
 			else if ($scope.sparulEndpoint.replace("update","data")==oldValue)
 				$scope.sparulEndpoint = newValue.replace("data","update")
@@ -82,16 +82,16 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 		$scope.sparulEndpointInput=newValue
 		if (newValue!=oldValue)
 			$localStorage.sparulEndpoint=newValue
-			if (!$scope.restEndpoint || $scope.restEndpoint == "" || $scope.restEndpoint == oldValue)
+			if (!$scope.restEndpoint || $scope.restEndpoint == "")
 				$scope.restEndpoint = newValue
 			else if ($scope.restEndpoint.replace("data","update")==oldValue)
 				$scope.restEndpoint = newValue.replace("update","data")
-			if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "" || $scope.sparqlEndpoint == oldValue)
+			if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "")
 				$scope.sparqlEndpoint = newValue
 			else if ($scope.sparqlEndpoint.replace("sparql","update")==oldValue)
 				$scope.sparqlEndpoint = newValue.replace("update","sparql")
 	)
-	$scope.$watch('data', (newValue,oldValue) -> 
+	$scope.$watch('data', (newValue,oldValue) ->
 		if (newValue!=oldValue)
 			$localStorage.data=newValue
 			appendPrefixIfNeeded(cm)
@@ -99,7 +99,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 	# utility functions
 	!function handleError(response)
 		$scope.errorSource = response.config.url
-		$scope.errorStatus = response.status + ( if (response.statusText) then " ("+response.statusText+")" else "") 
+		$scope.errorStatus = response.status + ( if (response.statusText) then " ("+response.statusText+")" else "")
 		$scope.errorRequest = response.config.data ? response.config.params?.query
 		$scope.errorMessage = response.data
 		$scope.showError = true
@@ -121,7 +121,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 	function getLineAfterPrefixes(data)
 		pos = 0
 		i = 0
-		while pos!=-1 && (data.charAt(pos)=='@' && data.charAt(pos+1)=='p' && data.charAt(pos+2)=='r' && data.charAt(pos+3)=='e' && data.charAt(pos+4)=='f' && data.charAt(pos+5)=='i' && data.charAt(pos+6)=='x') 
+		while pos!=-1 && (data.charAt(pos)=='@' && data.charAt(pos+1)=='p' && data.charAt(pos+2)=='r' && data.charAt(pos+3)=='e' && data.charAt(pos+4)=='f' && data.charAt(pos+5)=='i' && data.charAt(pos+6)=='x')
 			i++
 			pos=data.indexOf('\n',pos)
 		i
@@ -140,9 +140,9 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 		for line in lines
 			matches = line.match(prefixRegex)
 			if (matches?)
-				queryPrefixes[matches[1]] = matches[2] 
+				queryPrefixes[matches[1]] = matches[2]
 		queryPrefixes
-	!function appendPrefixIfNeeded(cm) 
+	!function appendPrefixIfNeeded(cm)
 		pos = cm.getCursor!
 		if(cm.getTokenTypeAt(pos)=="operator")
 			prefix = cm.getTokenAt({line: pos.line, ch:pos.ch-1})
@@ -150,7 +150,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 				currentPrefixes = getPrefixesFromData($scope.data)
 				if (!currentPrefixes[prefix.string]?)
 					ns = prefixService.getNs(prefix.string,true)
-					if (ns?) then appendPrefix(cm,prefix.string,ns)			
+					if (ns?) then appendPrefix(cm,prefix.string,ns)
 	!function applyAutocompletion(cm,data,completion)
 		sf = prefixService.shortForm(completion.text,false,true)
 		knownPrefixes = getPrefixesFromData($scope.data)
@@ -220,7 +220,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 			end = token.end
 			type = if (token.type=="keyword") then "property" else "class"
 			response <-! $http.get("http://lov.okfn.org/dataset/lov/api/v2/autocomplete/terms",
-				params: 
+				params:
 					q: prefix.string+":"+token.string
 					type: type
 			).then(_,handleError)
@@ -237,7 +237,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 							tmp = getNextNode(cm,{line:tmp.pos.line, ch:tmp.token.end + 1})
 							if (tmp?)
 								object = getNodeFromPosition(cm,tmp.pos).node
-					when "keyword" 
+					when "keyword"
 						query = propertyIRIQuery.getValue!
 						tmp = getPreviousNode(cm,{line:cur.line, ch:token.start - 1})
 						if (tmp?)
@@ -245,12 +245,12 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 						tmp = getNextNode(cm,{line:cur.line, ch:token.end + 1})
 						if (tmp?)
 							object = getNodeFromPosition(cm,tmp.pos).node
-					when "string" 
+					when "string"
 						query = objectIRIQuery.getValue!
 						tmp = getPreviousNode(cm,{line:cur.line,ch:token.start - 1})
 						if (tmp?)
 							property = getNodeFromPosition(cm,tmp.pos).node
-					else 
+					else
 						query = null
 				if (query?)
 					parts = query.split(/#\/?SUBJECTLIMIT/)
@@ -283,7 +283,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 					from: CodeMirror.Pos(cur.line, prefix.start)
 					to: CodeMirror.Pos(cur.line, end)
 				)
-		else # nonprefixed, do label search. 
+		else # nonprefixed, do label search.
 			# TODO: support atom IRI autocompletion, subject class restrictions
 			subject = property = object = subjectClasses = null
 			switch token.type
@@ -295,7 +295,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 						tmp = getNextNode(cm,{line:tmp.pos.line, ch:tmp.token.end + 1})
 						if (tmp?)
 							object = getNodeFromPosition(cm,tmp.pos).node
-				when "keyword" 
+				when "keyword"
 					query = propertyLabelQuery.getValue!
 					tmp = getPreviousNode(cm,{line:cur.line, ch:token.start - 1})
 					if (tmp?)
@@ -303,12 +303,12 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 					tmp = getNextNode(cm,{line:cur.line, ch:token.end + 1})
 					if (tmp?)
 						object = getNodeFromPosition(cm,tmp.pos).node
-				when "string" 
+				when "string"
 					query = objectLabelQuery.getValue!
 					tmp = getPreviousNode(cm,{line:cur.line,ch:token.start - 1})
 					if (tmp?)
 						property = getNodeFromPosition(cm,tmp.pos).node
-				else 
+				else
 					query = null
 			if (query?)
 				parts = query.split(/#\/?SUBJECTLIMIT/)
@@ -376,7 +376,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 	extraKeys["Ctrl-Space"] = "autocomplete"
 	extraKeys[ctrl+"J"] = (cm) -> cm.foldCode(cm.getCursor!)
 	folded = false
-	extraKeys[ctrl+"K"] = (cm) -> 
+	extraKeys[ctrl+"K"] = (cm) ->
 		if (!folded) then CodeMirror.commands.foldAll(cm) else CodeMirror.commands.unfoldAll(cm)
 		folded = !folded
 	extraKeys[ctrl+"S"] = (cm) -> saveCurrentSubjects(cm)
@@ -488,23 +488,23 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 		currentSubjects = getCurrentSubjects(cm)
 		if (!currentSubjects)
 			toastr.error("Couldn't find subject IRI(s)")
-		else 
+		else
 			query = replaceAll(replaceAll(deleteResourceQuery.getValue!,"<IRIS>",currentSubjects.iris.join(" ")),"<GRAPHIRI>",$scope.graphIRI)
-			<-! sparql.update($scope.sparulEndpoint,query).then(_,handleError)		
+			<-! sparql.update($scope.sparulEndpoint,query).then(_,handleError)
 			updateGraphs!
 			toastr.success("Successfully deleted #{currentSubjects.iris.join(", ")} in #{if ($scope.graphIRI) then "graph "+$scope.graphIRI else "default graph" } at endpoint #{$scope.restEndpoint} .")
 	function replaceCurrentSubjects(cm)
 		currentSubjects = getCurrentSubjects(cm)
 		if (!currentSubjects)
 			toastr.error("Couldn't find subject IRI(s)")
-		else 
+		else
 			query = replaceAll(replaceAll(deleteResourceQuery.getValue!,"<IRIS>",currentSubjects.iris.join(" ")),"<GRAPHIRI>",$scope.graphIRI)
 			<-! sparql.update($scope.sparulEndpoint,query).then(_,handleError)
 			<-! sparql.post($scope.restEndpoint,getPrefixLinesFromData($scope.data)+currentSubjects.data,$scope.graphIRI).then(_,handleError)
 			updateGraphs!
 			toastr.success("Successfully replaced #{currentSubjects.iris.join(", ")} in #{if ($scope.graphIRI) then "graph "+$scope.graphIRI else "default graph" } at endpoint #{$scope.restEndpoint} .")
 	function saveCurrentSubjects(cm)
-		if (cm.getSelection!) 
+		if (cm.getSelection!)
 			data = cm.getSelection!
 			value = "selection"
 		else
@@ -592,7 +592,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 	# query configuration
 	looseDefaultQueries =
 		describeQuery : '''CONSTRUCT { <IRI> ?p ?o } WHERE { <IRI> ?p ?o }'''
-		deleteResourceQuery : '''DELETE { ?s ?p ?o } WHERE { 
+		deleteResourceQuery : '''DELETE { ?s ?p ?o } WHERE {
 			VALUES ?s { <IRIS> }
 			?s ?p ?o .
 		}'''
@@ -686,7 +686,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
 		'''
 	strictDefaultQueries =
 		describeQuery : '''CONSTRUCT { <IRI> ?p ?o } WHERE { <IRI> ?p ?o }'''
-		deleteResourceQuery : '''DELETE { ?s ?p ?o } WHERE { 
+		deleteResourceQuery : '''DELETE { ?s ?p ?o } WHERE {
 			VALUES ?s { <IRIS> }
 			?s ?p ?o .
 		}'''
