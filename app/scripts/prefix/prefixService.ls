@@ -6,7 +6,7 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
   prefixNsMap = {}
   nsPrefixMap = {}
   newNss = 0
-  do 
+  do
     data <-! $http.get("http://prefix.cc/popular/all.file.json").then
     for prefix,ns of data.data
       defaultNsPrefixMap[ns]=prefix
@@ -16,11 +16,11 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
     p2 = string.lastIndexOf('/',pos)
     if (p1>p2) then p1 else p2
   {
-    reset : -> 
+    reset : ->
       newNss := 0
       prefixNsMap := {}
       nsPrefixMap := {}
-    setPrefixNsMap : (newPrefixNsMap) -> 
+    setPrefixNsMap : (newPrefixNsMap) ->
       prefixNsMap := newPrefixNsMap
       nsPrefixMap := {}
       for prefix, ns of prefixNsMap then nsPrefixMap[ns]=prefix
@@ -28,7 +28,7 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
       ret = {}
       for prefix, ns of map then ret[ns]=prefix
       ret
-    setPrefixNs : (prefix,ns) -> 
+    setPrefixNs : (prefix,ns) ->
       nsPrefixMap[ns]=prefix
       prefixNsMap[prefix]=ns
     expand : (prefixed) ->
@@ -92,7 +92,7 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
           return { shortForm: prefix+':'+this.escapeLocalName(uri.substring(pos+1)), ns : uri.substring(0,pos+1), prefix : prefix, newPrefix : true }
         pos = getLastSplit(uri,uri.length)
         pos2 = getLastSplit(uri,pos-1)
-        if (pos2!=-1 && (uri.charAt(pos2+1)<'0' || uri.charAt(pos2+1)>'9'))
+        if (pos2!=-1 && uri.charAt(pos2+1)!='_' && (uri.charAt(pos2+1)<'0' || uri.charAt(pos2+1)>'9'))
           newPrefixO = uri.substring(pos2+1,pos)
           newPrefix = newPrefixO
           nss = 1

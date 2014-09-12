@@ -29,7 +29,7 @@ a(href="https://github.com/jiemakel/snapper")
         .field
           button.ui.green.button(ng-class='loading ? "loading" : ""' ng-click='loadGraph()') Load
           button.ui.orange.button(ng-class='inserting ? "loading" : ""' ng-click='postGraph()') Insert
-          button.ui.red.button(ng-class='replacing ? "loading" : ""' ng-click='putGraph()') Replace
+          button.ui.red.button(ng-class='replacing ? "loading" : ""' ng-click='putGraph()') {{ data && data!='' ? 'Replace' : 'Delete' }}
         .ui.three.column.grid
           .field.column(ng-class="{ 'error': !restEndpointInputValid }")
             label SPARQL graph store protocol endpoint
