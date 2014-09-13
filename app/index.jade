@@ -22,7 +22,7 @@ html(lang="en")
     // endbuild
 
     title snapper
-    
+
   body(ng-app="app")
     .ui.dimmer.page(ng-class="{active:authOpen}"): .ui.modal.transition.visible
       h3.header Authentication required
@@ -35,7 +35,7 @@ html(lang="en")
           input(type='password', ng-model="password")
         .actions
           button.ui.green.button(ng-click="setAuth()") Ok
-          button.ui.red.button(ng-click="dismissAuth()") Cancel    
+          button.ui.red.button(ng-click="dismissAuth()") Cancel
     main(ui-view="")
     // build:js(app) scripts/vendor.js
     // bower:js

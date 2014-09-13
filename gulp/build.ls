@@ -1,5 +1,5 @@
 require!{
-  gulp 
+  gulp
   nib
 }
 $ = require("gulp-load-plugins")!

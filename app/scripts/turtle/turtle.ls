@@ -46,7 +46,7 @@ CodeMirror.defineMode "turtle", (config) ->
         state.curPos = "MLL"
         stream.eatWhile(/[^"]/)
         "string-2"
-      else 
+      else
         state.tokenize = tokenLiteral(ch)
         (if error then state.tokenize(stream, state) + " error" else state.tokenize(stream, state))
     else if /[{}\(\),\.;\[\]]/.test(ch)
@@ -182,7 +182,7 @@ CodeMirror.defineMode "turtle", (config) ->
     else if curPunc is "{"
       pushContext state, "}", stream.column!
     else if /[\]\}\)]/.test(curPunc)
-      while state.context and state.context.type is "pattern" then popContext state 
+      while state.context and state.context.type is "pattern" then popContext state
       popContext state if state.context and curPunc is state.context.type
     else if curPunc is "." and state.context and state.context.type is "pattern"
       popContext state
@@ -197,7 +197,7 @@ CodeMirror.defineMode "turtle", (config) ->
   indent: (state, textAfter) ->
     firstChar = textAfter and textAfter.charAt(0)
     context = state.context
-    while context and context.type is "pattern" then if /[\]\}]/.test(firstChar) then context = context.prev 
+    while context and context.type is "pattern" then if /[\]\}]/.test(firstChar) then context = context.prev
     closing = context and firstChar is context.type
     unless context
       return (if state.indent isnt 0 then state.indent else indentUnit)  if curPunc is ";"

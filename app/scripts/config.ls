@@ -15,7 +15,7 @@ angular.module('app', ['http-auth-interceptor','toastr','ngAnimate','ngStorage',
 			url: '/?data&restEndpoint&sparqlEndpoint&graphIRI&configuration',
 			templateUrl: 'partials/main.html',
 			controller: 'MainCtrl'
-		$urlRouterProvider.otherwise('/')	
+		$urlRouterProvider.otherwise('/')
 	.config (toastrConfig) ->
 		angular.extend toastrConfig,
 			allowHtml: false
