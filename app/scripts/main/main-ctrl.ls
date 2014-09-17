@@ -104,20 +104,46 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
     $scope.errorMessage = response.data
     $scope.showError = true
   canceler = null
+  $scope.$watch('graphIRI', (newValue,oldValue) ->
+    if (!allGraphsFetched) then updateGraphs!
+  )
+  graphQuery = '''
+    SELECT DISTINCT ?graphIRI ?triples {
+      {
+        {
+          SELECT (COUNT(*) AS ?triples) {
+            ?s ?p ?o
+          }
+        }
+      } UNION {
+        {
+          SELECT ?graphIRI (COUNT(*) AS ?triples) {
+            GRAPH ?graphIRI { }
+            FILTER STRSTARTS(STR(?graphIRI),"<QUERY>")
+            GRAPH ?graphIRI { ?s ?p ?o }
+          }
+          GROUP BY ?graphIRI
+          ORDER BY DESC(?triples)
+        }
+      } UNION {
+        {
+          SELECT ?graphIRI (COUNT(*) AS ?triples) {
+            GRAPH ?graphIRI { ?s ?p ?o }
+          }
+          GROUP BY ?graphIRI
+          ORDER BY DESC(?triples)
+        }
+      }
+    }
+    LIMIT 500
+    '''
+  allGraphsFetched = true
   !function updateGraphs
     if (canceler?) then canceler.resolve!
     canceler := $q.defer!
-    response <-! sparql.query($scope.sparqlEndpoint,'''
-      SELECT ?graphIRI (COUNT(*) AS ?triples) {
-        {
-        GRAPH ?graphIRI { ?s ?p ?o }
-        } UNION {
-        ?s ?p ?o
-        }
-      }
-      GROUP BY ?graphIRI
-      ''',{timeout: canceler.promise}).then(_,handleError)
+    response <-! sparql.query($scope.sparqlEndpoint,graphQuery.replace("<QUERY>",$scope.graphIRI ? ""),{timeout: canceler.promise}).then(_)
     $scope.graphs = response.data.results.bindings
+    if ($scope.graphs.length<500) then allGraphsFetched := true else allGraphsFetched := false
   function getLineAfterPrefixes(data)
     pos = 0
     i = 0
