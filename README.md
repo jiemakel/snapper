@@ -1,5 +1,7 @@
 # Snapper
 
+[![DOI](https://zenodo.org/badge/5847/jiemakel/snapper.png)](http://dx.doi.org/10.5281/zenodo.11754)
+
 Snapper is a browser-based [Turtle](http://www.w3.org/TR/turtle/) editor. Try it at http://jiemakel.github.io/snapper/ .
 
 Snapper supports:
