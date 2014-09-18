@@ -108,35 +108,36 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
     if (!allGraphsFetched) then updateGraphs!
   )
   graphQuery = '''
-    SELECT DISTINCT ?graphIRI ?triples {
+    SELECT ?graphIRI ?triples {
       {
-        {
-          SELECT (COUNT(*) AS ?triples) {
-            ?s ?p ?o
-          }
-        }
-      } UNION {
-        {
-          SELECT ?graphIRI (COUNT(*) AS ?triples) {
-            GRAPH ?graphIRI { }
-            FILTER STRSTARTS(STR(?graphIRI),"<QUERY>")
+        SELECT ?graphIRI (COUNT(*) AS ?triples) {
+          {
+            {
+              SELECT DISTINCT ?graphIRI {
+                {
+                  graph ?graphIRI {}
+                  FILTER STRSTARTS(STR(?graphIRI), "<QUERY>")
+                }
+                UNION
+                {
+                  graph ?graphIRI {}
+                }
+              }
+              LIMIT 500
+            }
             GRAPH ?graphIRI { ?s ?p ?o }
           }
-          GROUP BY ?graphIRI
-          ORDER BY DESC(?triples)
         }
-      } UNION {
-        {
-          SELECT ?graphIRI (COUNT(*) AS ?triples) {
-            GRAPH ?graphIRI { ?s ?p ?o }
-          }
-          GROUP BY ?graphIRI
-          ORDER BY DESC(?triples)
+        GROUP BY ?graphIRI
+      }
+      UNION
+      {
+        SELECT (COUNT(*) AS ?triples) {
+          ?s ?p ?o
         }
       }
     }
-    LIMIT 500
-    '''
+    ORDER BY ?graphIRI'''
   allGraphsFetched = true
   !function updateGraphs
     if (canceler?) then canceler.resolve!
