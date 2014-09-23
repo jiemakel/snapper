@@ -57,8 +57,12 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
       $localStorage.sparqlEndpoint=newValue
       if (!$scope.restEndpoint || $scope.restEndpoint == "")
         $scope.restEndpoint = newValue
+      else if ($scope.restEndpoint.replace("data","sparql")==oldValue)
+        $scope.restEndpoint = newValue.replace("sparql","data")
       if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "")
         $scope.sparulEndpoint = newValue
+      else if ($scope.sparulEndpoint.replace("update","sparql")==oldValue)
+        $scope.sparulEndpoint = newValue.replace("sparql","update")
     if (newValue?) then updateGraphs!
   )
   $scope.$watch('restEndpoint', (newValue,oldValue) ->
@@ -67,8 +71,12 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
       $localStorage.restEndpoint=newValue
       if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "")
         $scope.sparqlEndpoint = newValue
+      else if ($scope.sparqlEndpoint.replace("sparql","data")==oldValue)
+        $scope.sparqlEndpoint = newValue.replace("data","sparql")
       if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "")
         $scope.sparulEndpoint = newValue
+      else if ($scope.sparulEndpoint.replace("update","data")==oldValue)
+        $scope.sparulEndpoint = newValue.replace("data","update")
   )
   $scope.$watch('sparulEndpoint', (newValue,oldValue) ->
     $scope.sparulEndpointInput=newValue
@@ -76,8 +84,12 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
       $localStorage.sparulEndpoint=newValue
       if (!$scope.restEndpoint || $scope.restEndpoint == "")
         $scope.restEndpoint = newValue
+      else if ($scope.restEndpoint.replace("data","update")==oldValue)
+        $scope.restEndpoint = newValue.replace("update","data")
       if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "")
         $scope.sparqlEndpoint = newValue
+      else if ($scope.sparqlEndpoint.replace("sparql","update")==oldValue)
+        $scope.sparqlEndpoint = newValue.replace("update","sparql")
   )
   $scope.$watch('data', (newValue,oldValue) ->
     if (newValue!=oldValue)
