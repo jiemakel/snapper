@@ -33,13 +33,13 @@ a(href="https://github.com/jiemakel/snapper")
         .ui.three.column.grid
           .field.column(ng-class="{ 'error': !restEndpointInputValid }")
             label SPARQL graph store protocol endpoint
-            input(type='text', ng-model='restEndpointInput',ng-blur='restEndpoint = restEndpointInputValid ? restEndpointInput : restEndpoint')
+            input(type='text', ng-model='restEndpointInput',ng-blur='restEndpoint = restEndpointInput')
           .field.column(ng-class="{ 'error': !sparqlEndpointInputValid }")
             label SPARQL query endpoint
-            input(type='text', ng-model='sparqlEndpointInput',ng-blur='sparqlEndpoint = sparqlEndpointInputValid ? sparqlEndpointInput : sparqlEndpoint')
+            input(type='text', ng-model='sparqlEndpointInput',ng-blur='sparqlEndpoint = sparqlEndpointInput')
           .field.column(ng-class="{ 'error': !sparulEndpointInputValid }")
             label SPARQL update endpoint
-            input(type='text', ng-model='sparulEndpointInput',ng-blur='sparulEndpoint = sparulEndpointInputValid ? sparulEndpointInput : sparulEndpoint')
+            input(type='text', ng-model='sparulEndpointInput',ng-blur='sparulEndpoint = sparulEndpointInput')
         i.icon.info(ng-mouseenter="showInfo=true",ng-mouseleave="showInfo=false")
         span(ng-show="showInfo") If your endpoint isn't working, it may not be setting appropriate CORS headers. If so, you can try it with 'http://ldf.fi/corsproxy/'' prepended (e.g. http://ldf.fi/corsproxy/dbpedia.org/sparql)
       div(style="margin-top:1em")
