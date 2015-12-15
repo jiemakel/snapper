@@ -24,4 +24,4 @@ gulp.task \serve, <[watch]>, ->
     "app/images/**/*"
   ])
 
-gulp.task("serve:dist", <[dist]>, -> browserSyncInit("dist"))
+gulp.task("serve:dist", -> browserSync.init(server: { baseDir: "dist"}))
