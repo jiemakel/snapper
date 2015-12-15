@@ -51,44 +51,56 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
         $scope.restEndpointInputValid=isValid
       ,-> $scope.restEndpointInputValid=false)
   )
-  $scope.$watch('sparqlEndpoint', (newValue,oldValue) ->
-    $scope.sparqlEndpointInput=newValue
-    if (newValue!=oldValue)
-      $localStorage.sparqlEndpoint=newValue
-      if (!$scope.restEndpoint || $scope.restEndpoint == "" || $scope.restEndpoint == oldValue)
-        $scope.restEndpoint = newValue
-      else if ($scope.restEndpoint.replace("data","sparql")==oldValue)
-        $scope.restEndpoint = newValue.replace("sparql","data")
-      if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "" || $scope.sparulEndpoint == oldValue)
-        $scope.sparulEndpoint = newValue
-      else if ($scope.sparulEndpoint.replace("update","sparql")==oldValue)
-        $scope.sparulEndpoint = newValue.replace("sparql","update")
-    if (newValue?) then updateGraphs!
-  )
   $scope.$watch('restEndpoint', (newValue,oldValue) ->
     $scope.restEndpointInput=newValue
     if (newValue!=oldValue)
       $localStorage.restEndpoint=newValue
-      if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "" || $scope.sparqlEndpoint == oldValue)
+      if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "")
         $scope.sparqlEndpoint = newValue
-      else if ($scope.sparqlEndpoint.replace("sparql","data")==oldValue)
+      else if ($scope.sparqlEndpoint == oldValue)
+        if (newValue.replace(/(.*\/).*/,"$1") != oldValue.replace(/(.*\/).*/,"$1")) then $scope.sparqlEndpoint = newValue
+      else if (newValue.endsWith("data") && $scope.sparqlEndpoint.endsWith("sparql") && $scope.sparqlEndpoint.replace("sparql","data")==oldValue)
         $scope.sparqlEndpoint = newValue.replace("data","sparql")
-      if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "" || $scope.sparulEndpoint == oldValue)
+      if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "")
         $scope.sparulEndpoint = newValue
-      else if ($scope.sparulEndpoint.replace("update","data")==oldValue)
+      else if ($scope.sparulEndpoint == oldValue)
+        if (newValue.replace(/(.*\/).*/,"$1") != oldValue.replace(/(.*\/).*/,"$1")) then $scope.sparulEndpoint = newValue
+      else if (newValue.endsWith("data") && $scope.sparulEndpoint.endsWith("update") && $scope.sparulEndpoint.replace("update","data")==oldValue)
         $scope.sparulEndpoint = newValue.replace("data","update")
+  )
+  $scope.$watch('sparqlEndpoint', (newValue,oldValue) ->
+    $scope.sparqlEndpointInput=newValue
+    if (newValue!=oldValue)
+      $localStorage.sparqlEndpoint=newValue
+      if (!$scope.restEndpoint || $scope.restEndpoint == "")
+        $scope.restEndpoint = newValue
+      else if ($scope.restEndpoint == oldValue)
+        if (newValue.replace(/(.*\/).*/,"$1") != oldValue.replace(/(.*\/).*/,"$1")) then $scope.restEndpoint = newValue
+      else if (newValue.endsWith("sparql") && $scope.restEndpoint.endsWith("data") && $scope.restEndpoint.replace("data","sparql")==oldValue)
+        $scope.restEndpoint = newValue.replace("sparql","data")
+      if (!$scope.sparulEndpoint || $scope.sparulEndpoint == "")
+        $scope.sparulEndpoint = newValue
+      else if ($scope.sparulEndpoint == oldValue)
+        if (newValue.replace(/(.*\/).*/,"$1") != oldValue.replace(/(.*\/).*/,"$1")) then $scope.sparulEndpoint = newValue
+      else if (newValue.endsWith("sparql") && $scope.sparulEndpoint.endsWith("update") && $scope.sparulEndpoint.replace("update","sparql")==oldValue)
+        $scope.sparulEndpoint = newValue.replace("sparql","update")
+    if (newValue?) then updateGraphs!
   )
   $scope.$watch('sparulEndpoint', (newValue,oldValue) ->
     $scope.sparulEndpointInput=newValue
     if (newValue!=oldValue)
       $localStorage.sparulEndpoint=newValue
-      if (!$scope.restEndpoint || $scope.restEndpoint == "" || $scope.restEndpoint == oldValue)
+      if (!$scope.restEndpoint || $scope.restEndpoint == "")
         $scope.restEndpoint = newValue
-      else if ($scope.restEndpoint.replace("data","update")==oldValue)
+      else if ($scope.restEndpoint == oldValue)
+        if (newValue.replace(/(.*\/).*/,"$1") != oldValue.replace(/(.*\/).*/,"$1")) then $scope.restEndpoint = newValue
+      else if (newValue.endsWith("update") && $scope.restEndpoint.endsWith("data") && $scope.restEndpoint.replace("data","update")==oldValue)
         $scope.restEndpoint = newValue.replace("update","data")
-      if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "" || $scope.sparqlEndpoint == oldValue)
+      if (!$scope.sparqlEndpoint || $scope.sparqlEndpoint == "")
         $scope.sparqlEndpoint = newValue
-      else if ($scope.sparqlEndpoint.replace("sparql","update")==oldValue)
+      else if ($scope.sparqlEndpoint == oldValue)
+        if (newValue.replace(/(.*\/).*/,"$1") != oldValue.replace(/(.*\/).*/,"$1")) then $scope.sparqlEndpoint = newValue
+      else if (newValue.endsWith("update") && $scope.sparqlEndpoint.endsWith("sparql") && $scope.sparqlEndpoint.replace("sparql","update")==oldValue)
         $scope.sparqlEndpoint = newValue.replace("update","sparql")
   )
   $scope.$watch('data', (newValue,oldValue) ->
