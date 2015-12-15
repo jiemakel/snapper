@@ -35,7 +35,7 @@ angular.module('fi.seco.sparql',[])
           data : ""
           headers: { 'Content-Type' : 'text/turtle' }
         },params)).then(
-          (response) -> deferred.resolve(response.status == 204)
+          (response) -> deferred.resolve(response.status == 204 || response.status == 200)
         , (response) -> deferred.reject(response)
         )
         deferred.promise
