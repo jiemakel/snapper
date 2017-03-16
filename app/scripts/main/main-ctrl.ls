@@ -452,7 +452,7 @@ angular.module('app').controller('MainCtrl', ($scope, $http, toastr, $stateParam
       sf = prefixService.shortForm(iri,false,true)
       if (sf.newPrefix)
         newPrefixes += "@prefix #{sf.prefix}: <#{sf.ns}> .\n"
-      data = replaceAll(data,iri,sf.shortForm)
+      data = data.replace(new RegExp(escapeRegexp(iri)+'(?=([^"\\\\]*(\\\\.|"([^"\\\\]*\\\\.)*[^"\\\\]*"))*[^"]*$)',"g"),sf.shortForm)
     {newPrefixes:newPrefixes,data:data}
   function processWhitespace(data)
     data.replace(wsRegex1,"    ").replace(wsRegex2,"  ")

@@ -91,9 +91,10 @@ angular.module('fi.seco.prefix',[]).factory('prefixService', ($http) ->
           prefixNsMap[prefix]=ns
           return { shortForm: prefix+':'+this.escapeLocalName(uri.substring(pos+1)), ns : uri.substring(0,pos+1), prefix : prefix, newPrefix : true }
         pos = getLastSplit(uri,uri.length)
+        if (pos==uri.length - 1) then return { shortForm: iuri }
         pos2 = getLastSplit(uri,pos-1)
-        if (pos2!=-1 && uri.charAt(pos2+1)!='_' && (uri.charAt(pos2+1)<'0' || uri.charAt(pos2+1)>'9'))
-          newPrefixO = uri.substring(pos2+1,pos)
+        newPrefixO = uri.substring(pos2+1,pos)
+        if (newPrefixO.indexOf('-') == -1 && newPrefixO.length != 0 && (newPrefixO.charAt(0)<'0' || newPrefixO.charAt(0)>'9') &&  pos2!=-1 && uri.charAt(pos2+1)!='_' && (uri.charAt(pos2+1)<'0' || uri.charAt(pos2+1)>'9'))
           newPrefix = newPrefixO
           nss = 1
           while (prefixNsMap[newPrefix]) then newPrefix = newPrefixO+(++nss)
